@@ -1,17 +1,18 @@
 @font-face {
-  font-family: 'Manrope Variable';
+  font-family: 'Inter Variable';
   font-style: normal;
   font-weight: 200 800;
   font-display: swap;
-  src: url('@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2') format('woff2');
+  src: url('@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') format('woff2');
 }
 
 :root {
-  font-family: 'Manrope Variable', 'Segoe UI', sans-serif;
+  font-family: 'Inter Variable', 'Segoe UI', sans-serif;
   color: #f2f0e9;
   background: #191a18;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+  font-feature-settings: 'cv11' 1, 'tnum' 1;
   -webkit-font-smoothing: antialiased;
   --bg: #191a18;
   --sidebar: #1e1f1c;
@@ -377,7 +378,12 @@ button, input, select, textarea { transition: background-color .16s ease, border
 .login-form h2 { font-size: 27px; letter-spacing: -.9px; }
 .login-form > p { font-size: 13px; color: var(--muted); line-height: 1.9; margin-bottom: 30px; }
 .login-form form > .button { width: 100%; margin: 7px 0 20px; }
+.recovery-link { margin: -5px 0 17px; }
 .login-form .login-private { font-size: 10px; display: flex; align-items: center; gap: 7px; margin-bottom: 20px; }
+.recovery-sent { display: flex; align-items: flex-start; gap: 12px; padding: 17px; margin: 4px 0 23px; border: 1px solid color-mix(in srgb, var(--green) 35%, var(--border)); border-radius: 10px; background: color-mix(in srgb, var(--green) 9%, var(--surface)); color: var(--green); }
+.recovery-sent p { color: var(--muted); font-size: 12px; line-height: 1.8; margin: 0; }
+.recovery-sent strong { color: var(--text); overflow-wrap: anywhere; }
+.recovery-page .login-form > p { margin-bottom: 25px; }
 @media (min-width: 1550px) {
   .card-image { height: 205px; }
   .card-image > .drink-art { width: 255px; height: 215px; }
@@ -438,7 +444,7 @@ button, input, select, textarea { transition: background-color .16s ease, border
   .topbar { height: 72px; padding: 0 20px; }
   .desktop-breadcrumb, .top-avatar, .toolbar-divider { display: none; }
   .mobile-brand { display: flex; align-items: center; gap: 12px; color: var(--accent-text); font-family: Georgia, serif; font-weight: 800; font-size: 33px; letter-spacing: -2.5px; }
-  .mobile-brand > span { font-family: 'Manrope Variable', sans-serif; color: var(--muted); font-size: 10px; font-weight: 550; letter-spacing: 0; border-left: 1px solid var(--border); padding-left: 12px; }
+  .mobile-brand > span { font-family: 'Inter Variable', sans-serif; color: var(--muted); font-size: 10px; font-weight: 550; letter-spacing: 0; border-left: 1px solid var(--border); padding-left: 12px; }
   .topbar-actions { gap: 9px; }
   .sync-status { font-size: 9px; }
   .theme-toggle { width: 34px; height: 38px; }

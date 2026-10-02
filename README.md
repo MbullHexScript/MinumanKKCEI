@@ -74,6 +74,12 @@ Routing detail memakai hash, sehingga tidak memerlukan rewrite halaman khusus. B
 - Saat dua perangkat mengedit resep yang sama, penyimpanan terakhir berlaku. Gunakan Muat ulang di pengaturan sebelum melanjutkan edit dari perangkat lain.
 - Pembaruan PWA dipasang pada kunjungan berikutnya setelah seluruh tab aplikasi ditutup; halaman edit tidak dipaksa reload.
 
+## Pemulihan password
+
+Login memiliki tombol **Lupa password?** yang mengirim email recovery Supabase dengan redirect ke origin aplikasi yang sedang dibuka. Saat link email dibuka, aplikasi menampilkan form **Buat password baru** dan memanggil `auth.updateUser` setelah password dikonfirmasi.
+
+Di Supabase, buka **Authentication → URL Configuration** dan pastikan URL aplikasi ada di **Redirect URLs**. Untuk lokal tambahkan `http://localhost:5173/**`; setelah deploy tambahkan URL Vercel, misalnya `https://minuman-kkcei.vercel.app/**`. Set **Site URL** ke URL produksi utama. Link recovery bersifat sekali pakai dan dapat kedaluwarsa; jika gagal, kirim link baru dari halaman login.
+
 ## Pemeriksaan
 
 ```sh

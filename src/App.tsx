@@ -8,6 +8,7 @@ import RecipeDetail from './components/RecipeDetail';
 import RecipeEditor from './components/RecipeEditor';
 import Login from './components/Login';
 import Settings from './components/Settings';
+import PasswordRecovery from './components/PasswordRecovery';
 
 const categoryIcons: Record<string, typeof Coffee> = {
   'Black Coffee': Coffee, 'Milk Based': Milk, 'Matcha Series': Leaf, 'Cei-gnature': Sparkles,
@@ -65,6 +66,7 @@ export default function App() {
   };
 
   if (!store.authReady) return <div className="loading-screen"><span className="brand-mark">Cei</span><LoaderCircle className="spin"/><p>Membuka buku racikan…</p></div>;
+  if (supabase && store.passwordRecovery && store.session) return <PasswordRecovery onUpdate={store.updatePassword}/>;
   if (supabase && !store.session && !store.demo) return <Login onDemo={() => store.setDemo(true)}/>;
 
   return <div className="app-shell">

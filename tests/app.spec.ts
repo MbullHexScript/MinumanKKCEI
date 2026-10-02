@@ -8,12 +8,17 @@ async function addRecipe(page: Page) {
   if (await page.locator('.bottom-nav').isVisible()) await page.locator('.bottom-nav').getByRole('button', { name: 'Tambah', exact: true }).click();
   else await page.getByRole('button', { name: 'Tambah resep', exact: true }).click();
 }
+async function enterLocalPreview(page: Page) {
+  const login = page.getByRole('button', { name: 'Lihat pratinjau lokal dulu' });
+  if (await login.isVisible().catch(() => false)) await login.click();
+  await expect(page.getByRole('heading', { name: 'Mau meracik apa?' })).toBeVisible();
+}
 
 test.beforeEach(async ({ page }) => {
   // Memastikan preview HTTP di HP tetap bekerja tanpa randomUUID (secure-context only).
   await page.addInitScript(() => { Object.defineProperty(window.crypto, 'randomUUID', { value: undefined }); });
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Mau meracik apa?' })).toBeVisible();
+  await enterLocalPreview(page);
 });
 
 test('katalog, pencarian bahan, kategori, takaran foam, dan varian', async ({ page }, testInfo) => {
@@ -58,6 +63,7 @@ test('tambah, edit, favorit, duplikat, hapus, dan persistensi', async ({ page })
   await page.getByRole('button', { name: 'Simpan resep' }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
   await page.reload();
+  await enterLocalPreview(page);
   await page.getByRole('searchbox', { name: 'Cari minuman' }).fill('Kopi pengujian');
   await page.getByRole('button', { name: 'Lihat resep Kopi pengujian', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('32,5 g');
@@ -77,6 +83,7 @@ test('tambah, edit, favorit, duplikat, hapus, dan persistensi', async ({ page })
   await page.getByRole('button', { name: 'Hapus resep', exact: true }).click();
   await expect(page.locator('.recipe-card')).toHaveCount(1);
   await page.reload();
+  await enterLocalPreview(page);
   const nav = page.getByRole('navigation', { name: await page.locator('.bottom-nav').isVisible() ? 'Navigasi mobile' : 'Navigasi utama' });
   await nav.getByRole('button', { name: /Favorit/ }).click();
   await expect(page.locator('.recipe-card')).toHaveCount(1);
@@ -107,6 +114,7 @@ test('foto, cadangan JSON lengkap, validasi impor, dan tema persisten', async ({
   await expect(page.getByRole('alert')).toContainText('bukan cadangan Cei yang valid');
   await page.getByRole('button', { name: 'Terang', exact: true }).click();
   await page.reload();
+  await enterLocalPreview(page);
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   await expect(page.getByRole('button', { name: 'Lihat resep Cei Aren hasil impor', exact: true })).toBeVisible();
 });
@@ -139,9 +147,11 @@ test('additional terhubung dan perlindungan hapus referensi', async ({ page }) =
 test('aplikasi dan resep yang tersimpan tetap bisa dibuka offline', async ({ page, context }) => {
   await page.evaluate(async () => { await navigator.serviceWorker.ready; });
   await page.reload();
+  await enterLocalPreview(page);
   await expect(page.locator('.recipe-card')).toHaveCount(42);
   await context.setOffline(true);
   await page.reload();
+  await enterLocalPreview(page);
   await page.getByRole('button', { name: 'Lihat resep Strawberry Matcha' }).click();
   await expect(page.locator('.foam-section')).toContainText('Rich Gold');
   await expect(page.getByRole('dialog')).toContainText('Fresh milk');

@@ -13,7 +13,7 @@ Buku saku barista untuk dipakai satu tangan di counter, bukan situs promosi coff
 - Sage: `#a9bb8d`, status positif.
 - Cream: `#f6f4ee`, latar mode terang.
 
-Manrope variable, di-host lokal: teks UI dan heading; angka takaran memakai tabular numerals. Georgia hanya untuk logotype ilustratif Cei dan catatan kecil pada artwork. Heading padat, isi ringkas, takaran jauh lebih besar dari label bahan.
+Inter variable, di-host lokal: teks UI dan heading; angka takaran memakai tabular numerals supaya rapi saat membandingkan bahan. Georgia hanya untuk logotype ilustratif Cei dan catatan kecil pada artwork. Heading padat, isi ringkas, takaran jauh lebih besar dari label bahan.
 
 ## Layout
 

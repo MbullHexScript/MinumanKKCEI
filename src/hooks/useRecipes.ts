@@ -6,6 +6,10 @@ import { readCache, writeCache } from '../lib/storage';
 
 export function useRecipes() {
   const [session, setSession] = useState<Session | null>(null);
+  const [passwordRecovery, setPasswordRecovery] = useState(() => {
+    const hash = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+    return hash.get('type') === 'recovery';
+  });
   const [authReady, setAuthReady] = useState(!supabase);
   const [demo, setDemo] = useState(!supabase);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -30,13 +34,14 @@ export function useRecipes() {
   useEffect(() => {
     if (!supabase) return;
     let active = true;
-    supabase.auth.getSession().then(({ data, error: authError }) => {
-      if (active) { setSession(data.session); setAuthReady(true); if (authError) setError(authError.message); }
-    }).catch(() => { if (active) { setAuthReady(true); setError('Sesi tidak bisa dimuat. Periksa koneksi.'); } });
-    const { data } = supabase.auth.onAuthStateChange((_event, next) => {
+    const { data } = supabase.auth.onAuthStateChange((event, next) => {
       setSession(next);
       setAuthReady(true);
+      if (event === 'PASSWORD_RECOVERY') setPasswordRecovery(true);
     });
+    supabase.auth.getSession().then(({ data: sessionData, error: authError }) => {
+      if (active) { setSession(sessionData.session); setAuthReady(true); if (authError) setError(authError.message); }
+    }).catch(() => { if (active) { setAuthReady(true); setError('Sesi tidak bisa dimuat. Periksa koneksi.'); } });
     return () => { active = false; data.subscription.unsubscribe(); };
   }, []);
 
@@ -96,5 +101,13 @@ export function useRecipes() {
     setDemo(false); setRecipes([]);
   };
 
-  return { recipes, session, authReady, demo, setDemo, cloud, loading, saving, error, cacheWarning, online, cloudFresh, reload, persist, logout };
+  const updatePassword = async (password: string) => {
+    if (!supabase) throw new Error('Pemulihan password membutuhkan koneksi Supabase.');
+    const { error: updateError } = await supabase.auth.updateUser({ password });
+    if (updateError) throw updateError;
+    setPasswordRecovery(false);
+    window.history.replaceState(null, '', window.location.pathname + window.location.search);
+  };
+
+  return { recipes, session, passwordRecovery, authReady, demo, setDemo, cloud, loading, saving, error, cacheWarning, online, cloudFresh, reload, persist, logout, updatePassword };
 }
