@@ -13,8 +13,8 @@ export default defineConfig({
         short_name: 'Racikan Cei',
         description: 'Buku racikan pribadi Kedai Kopi Cei',
         lang: 'id',
-        theme_color: '#191a18',
-        background_color: '#191a18',
+        theme_color: '#FFFCFB',
+        background_color: '#FFFCFB',
         display: 'standalone',
         start_url: '/',
         icons: [

@@ -157,3 +157,28 @@ test('aplikasi dan resep yang tersimpan tetap bisa dibuka offline', async ({ pag
   await expect(page.getByRole('dialog')).toContainText('Fresh milk');
   await context.setOffline(false);
 });
+
+test('navigasi kapsul mengikuti halaman aktif, ketukan cepat, dan reduced motion', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'Navigasi mengambang hanya tampil di HP.');
+  await page.setViewportSize({ width: 320, height: 740 });
+  const nav = page.getByRole('navigation', { name: 'Navigasi mobile' });
+  const box = await nav.boundingBox();
+  expect(box!.x).toBeGreaterThan(0);
+  expect(box!.x + box!.width).toBeLessThan(320);
+  expect(box!.y + box!.height).toBeLessThan(740);
+  for (const button of await nav.getByRole('button').all()) expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await nav.getByRole('button', { name: 'Favorit', exact: true }).click();
+  await nav.getByRole('button', { name: 'Pengaturan', exact: true }).click();
+  await nav.getByRole('button', { name: 'Racikan', exact: true }).click();
+  await expect(nav.getByRole('button', { name: 'Racikan', exact: true })).toHaveAttribute('aria-current', 'page');
+  const indicatorOffset = () => page.locator('.nav-indicator').evaluate(element => new DOMMatrixReadOnly(getComputedStyle(element).transform).m41);
+  await expect.poll(indicatorOffset).toBeLessThan(.2);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await nav.getByRole('button', { name: 'Pengaturan', exact: true }).click();
+  const target = await nav.getByRole('button', { name: 'Pengaturan', exact: true }).evaluate(element => (element as HTMLElement).offsetLeft - 7);
+  expect(await indicatorOffset()).toBeCloseTo(target, 1);
+  await page.getByRole('button', { name: 'Gelap', exact: true }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('body')).toHaveJSProperty('scrollWidth', 320);
+  await page.screenshot({ path: testInfo.outputPath('capsule-dark-320.png') });
+});

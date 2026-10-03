@@ -28,7 +28,7 @@ for (const size of [192, 512]) {
       const radius = Math.hypot(px - .475, py - .5);
       const letter = radius > .145 && radius < .255 && !(px > .475 && Math.abs(py - .5) < .097);
       const dot = Math.hypot(px - .715, py - .675) < .047;
-      const color = letter || dot ? [34, 35, 31] : [237, 183, 90];
+      const color = letter || dot ? [255, 252, 251] : [9, 63, 180];
       const offset = y * (size * 3 + 1) + 1 + x * 3;
       raw.set(color, offset);
     }

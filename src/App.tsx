@@ -9,13 +9,14 @@ import RecipeEditor from './components/RecipeEditor';
 import Login from './components/Login';
 import Settings from './components/Settings';
 import PasswordRecovery from './components/PasswordRecovery';
+import MobileNav from './components/MobileNav';
 
 const categoryIcons: Record<string, typeof Coffee> = {
   'Black Coffee': Coffee, 'Milk Based': Milk, 'Matcha Series': Leaf, 'Cei-gnature': Sparkles,
   'Non Coffee': CupSoda, Mocktail: Wine, Tea: Flower2, Instan: CupSoda, Additional: Sparkles,
 };
 const getSelectedId = () => window.location.hash.startsWith('#recipe/') ? window.location.hash.slice(8) : null;
-function savedTheme() { try { return localStorage.getItem('cei:theme') === 'light' ? 'light' : 'dark'; } catch { return 'dark'; } }
+function savedTheme() { try { return localStorage.getItem('cei:theme') === 'dark' ? 'dark' : 'light'; } catch { return 'light'; } }
 
 export default function App() {
   const store = useRecipes();
@@ -37,7 +38,7 @@ export default function App() {
   const categories = [...new Set([...CATEGORIES, ...store.recipes.map(recipe => recipe.category)])];
   const filtered = store.recipes.filter(recipe => (page !== 'favorites' || recipe.favorite) && (category === 'Semua' || recipe.category === category) && (!foamOnly || recipe.foam.enabled) && matchesSearch(recipe, query)).sort((a, b) => sort === 'name' ? a.name.localeCompare(b.name, 'id') : Number(hasRecipe(b)) - Number(hasRecipe(a)));
 
-  useEffect(() => { document.documentElement.dataset.theme = theme; document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#191a18' : '#f6f4ee'); try { localStorage.setItem('cei:theme', theme); } catch { /* Preferensi tetap berlaku untuk sesi ini. */ } }, [theme]);
+  useEffect(() => { document.documentElement.dataset.theme = theme; document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#10182b' : '#FFFCFB'); try { localStorage.setItem('cei:theme', theme); } catch { /* Preferensi tetap berlaku untuk sesi ini. */ } }, [theme]);
   useEffect(() => { if (!toast) return; const timer = window.setTimeout(() => setToast(null), toast.error ? 8000 : 4000); return () => clearTimeout(timer); }, [toast]);
   useEffect(() => { const pop = () => setSelectedId(getSelectedId()); window.addEventListener('popstate', pop); return () => window.removeEventListener('popstate', pop); }, []);
   useEffect(() => {
@@ -100,7 +101,7 @@ export default function App() {
         </>}
       </main>
     </div>
-    <nav className="bottom-nav" aria-label="Navigasi mobile"><button className={page === 'recipes' ? 'active' : ''} onClick={() => navigate('recipes')}><BookOpen size={20}/><span>Racikan</span></button><button className={page === 'favorites' ? 'active' : ''} onClick={() => navigate('favorites')}><Heart size={20}/><span>Favorit</span></button><button className="mobile-add" disabled={!canEdit} onClick={addRecipe}><span><Plus size={23}/></span><span>Tambah</span></button><button className={page === 'settings' ? 'active' : ''} onClick={() => navigate('settings')}><SettingsIcon size={20}/><span>Pengaturan</span></button></nav>
+    <MobileNav page={page} onNavigate={navigate} onAdd={addRecipe} canEdit={canEdit}/>
     {selected && !editor && <RecipeDetail recipe={selected} recipes={store.recipes} onClose={closeRecipe} onEdit={() => setEditor({ recipe: selected, isNew: false })} onFavorite={() => favorite(selected)} onDuplicate={() => setEditor({ recipe: { ...structuredClone(selected), id: newRecipeId(), name: `${selected.name} (salinan)`, favorite: false }, isNew: true })} onDelete={() => deleteRecipe(selected)} disabled={!canEdit} feedback={toast}/>}
     {editor && <RecipeEditor initial={editor.recipe} recipes={store.recipes} isNew={editor.isNew} saving={store.saving} onClose={() => setEditor(null)} onSave={async recipe => { await store.persist([recipe]); setEditor(null); notify(store.cloud ? 'Resep tersimpan di database.' : 'Resep tersimpan di perangkat ini.'); }}/ >}
     {toast && !selected && !editor && <div className={`toast ${toast.error ? 'toast-error' : ''}`} role={toast.error ? 'alert' : 'status'}>{toast.error ? <CircleAlert size={18}/> : <Check size={18}/>}<span>{toast.text}</span><button className="icon-button" aria-label="Tutup notifikasi" onClick={() => setToast(null)}><X size={15}/></button></div>}

@@ -2,22 +2,22 @@
 
 ## Dasar
 
-Buku saku barista untuk dipakai satu tangan di counter, bukan situs promosi coffee shop. Identitas diambil dari foto menu: charcoal, amber, motif kotak-kotak, dan nama Cei.
+Buku saku barista untuk dipakai satu tangan di counter, bukan situs promosi coffee shop. Palet sesuai arahan terbaru: biru #093FB4 dan putih #FFFCFB. Motif kotak-kotak dan nama Cei mempertahankan identitas kedai.
 
 ## Token
 
-- Counter: `#191a18`, latar gelap utama.
-- Paper: `#f2f0e9`, teks utama.
-- Amber: `#edb75a`, tindakan utama dan identitas.
-- Tray: `#22231f`, permukaan kontrol/kartu.
-- Sage: `#a9bb8d`, status positif.
-- Cream: `#f6f4ee`, latar mode terang.
+- Blue: `#093FB4`, tindakan utama dan identitas.
+- White: `#FFFCFB`, latar mode terang dan teks di atas biru.
+- Ink: `#182b4d`, teks mode terang.
+- Mist: `#e8efff`, latar kontrol aktif dan foam.
+- Midnight: `#10182b`, latar mode gelap.
+- Glass: permukaan navigasi mengikuti tema, dengan blur dan opacity tinggi agar teks tetap terbaca.
 
 Inter variable, di-host lokal: teks UI dan heading; angka takaran memakai tabular numerals supaya rapi saat membandingkan bahan. Georgia hanya untuk logotype ilustratif Cei dan catatan kecil pada artwork. Heading padat, isi ringkas, takaran jauh lebih besar dari label bahan.
 
 ## Layout
 
-Desktop: navigasi samping tetap, area koleksi rata kiri, grid empat kolom. HP: header ringkas, grid dua kolom, navigasi bawah dalam jangkauan ibu jari. Detail/form memakai dialog layar penuh di HP, dengan tindakan tersimpan di bagian bawah.
+Desktop: navigasi samping tetap, area koleksi rata kiri, grid empat kolom. HP: header ringkas, grid dua kolom, navigasi kapsul mengambang dalam jangkauan ibu jari, di atas safe area. Indikator biru bergerak memakai spring critically damped yang mempertahankan kecepatan saat target berubah. Sentuhan memberikan feedback langsung; reduced motion memindahkan indikator tanpa animasi. Detail/form memakai dialog layar penuh di HP, dengan tindakan tersimpan di bagian bawah.
 
 ```text
 Desktop                         HP
@@ -35,7 +35,7 @@ Desktop                         HP
 
 ## Review sebelum implementasi
 
-Hero marketing besar akan memperlambat pencarian saat shift; diperkecil menjadi pembuka pendek, lalu pencarian dan kategori langsung terlihat. Aksen amber dan checker berasal dari menu asli, bukan dekorasi acak. Ilustrasi minuman dibuat lokal agar konsisten dan offline; label Ilustrasi membedakannya dari foto asli. Tidak menebak resep atau foam untuk menu yang belum diberikan.
+Hero marketing besar akan memperlambat pencarian saat shift; diperkecil menjadi pembuka pendek, lalu pencarian dan kategori langsung terlihat. Checker berasal dari menu asli; biru–putih mengikuti palet pilihan pemilik. Ilustrasi minuman dibuat lokal agar konsisten dan offline; label Ilustrasi membedakannya dari foto asli. Tidak menebak resep atau foam untuk menu yang belum diberikan.
 
 Gerak dibatasi pada feedback kontrol, menghormati reduced motion. Tidak ada animasi masuk kartu berulang. Warna foam tidak menjadi satu-satunya pembeda: badge dan judul eksplisit tetap ada.
 
